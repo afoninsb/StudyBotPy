@@ -1,0 +1,32 @@
+{% extends 'base-1c.html' %}
+{% load static %}
+
+{% block pagehead %}Добавляем вопрос{% endblock  %}
+
+{% block content %}
+  <h4>Шаг 1</h4>
+  <form action='' method='post'>{% csrf_token %}
+    <div style='margin-left: 100px;'>
+      {% for field in form %}
+        <div class="row">
+          <div class="col-md-10">
+            {{ field.label_tag }}<br>
+            {{ field }}
+            {% if field.help_text %}
+              <br><small id="{{ field.id_for_label }}-help" class="form-text text-muted">
+                {{ field.help_text|safe }}
+              </small>
+            {% endif %}
+          </div>
+        </div><br>
+      {% endfor %}
+      <div class="row">
+        <div class="col-md-10">
+          <br><input type='submit' 
+            value='{% if step == 1 %}Д А Л Е Е{% else %}С О Х Р А Н И Т Ь{% endif %} '
+            class='btn btn-primary'>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock  %}

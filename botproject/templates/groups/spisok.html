@@ -1,0 +1,34 @@
+{% extends 'base-1c.html' %}
+{% load static %}
+
+{% block pagehead %}Список учащихся бота{% endblock  %}
+
+{% block content %}
+  <ul class="list-group">
+    {% for user in users %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="ms-2 me-auto">{{ user }}</div>
+        <span class="badge">
+          <a href='#' title='Удалить пункт' onclick="
+            Swal.fire({
+                icon: 'warning',
+                title: 'Вы точно хотите удалить ученика из бота? Удалится вся информация об ученике в данном боте',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Да! Удаляем!',
+                cancelButtonText: 'Нет! Я передумал...'
+            }).then(function(inputvalue){
+                if(inputvalue.isConfirmed){
+                    window.location.href = '{% url 'groups:user_del' botid user.id %}';
+                } else {
+                    Swal.fire('Хорошо. Оставляем.', '', 'success')
+                }
+            });">
+            <i class="ri-delete-bin-5-fill ri-lg" data-bs-toggle="tooltip" data-bs-placement="top" title="Удалить ученика {{ user }} из бота" style="cursor: pointer;"></i>
+          </a>
+        </span>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock  %}

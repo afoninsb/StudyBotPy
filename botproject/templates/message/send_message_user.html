@@ -1,0 +1,36 @@
+{% extends 'base-2c.html' %}
+{% load static %}
+
+{% block pagehead %}Сообщение ученику{% endblock  %}
+
+{% block content_1 %}
+  <form action='' method='post' enctype="multipart/form-data">{% csrf_token %}
+    <h5 class="card-title">{{ user }}</h5>
+  {% endblock  %}
+
+  {% block content_2 %}
+    <h5 class="card-title">Сообщение</h5>
+
+    <div class="row mb-3">
+      <div class="col-sm-12">
+        <textarea class="form-control" style="height: 200px" name="text" required></textarea>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <label for="id_img">Изображение:</label><br>
+        <input type="file" name="img" class="form-control" accept="image/*" id="id_img">
+        
+        <p class="help">Загрузите изображение .jpg, .png</p>
+        
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-sm-12" style="text-align: center;">
+        <input type='submit' value='О Т П Р А В И Т Ь' class="btn btn-primary">
+      </div>
+    </div>
+  </form>
+{% endblock  %}

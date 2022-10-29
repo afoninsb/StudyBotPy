@@ -1,0 +1,30 @@
+{% extends 'base-1c.html' %}
+{% load static %}
+
+{% block pagehead %}
+  Прикрепляем тему к группе  
+  <a href="{% url 'groups:group' botid group_id %}">{{group_name}}</a>
+{% endblock  %}
+
+{% block content %}
+  <h5 class="card-title">Выберите план</h5>
+  <form action='' method='post'>{% csrf_token %}
+    <div class="row mb-3">
+      <div class="col-sm-12">
+        <ul class="list-group">
+          {% for plan in plans %}
+            <li class="list-group-item">
+              <input class="form-check-input me-1" type="checkbox" name="ids" value="{{ plan.id }}">
+              {{ plan }}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-sm-12">
+        <input type='submit' value='О Т П Р А В И Т Ь' class="btn btn-primary">
+      </div>
+    </div>
+  </form>
+{% endblock  %}

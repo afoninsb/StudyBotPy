@@ -1,0 +1,64 @@
+{% extends 'base-2c.html' %}
+{% load static %}
+
+{% block pagehead %}Сообщение ученикам{% endblock  %}
+
+{% block content_1 %}
+  <form action='' method='post' enctype="multipart/form-data">{% csrf_token %}
+    <h5 class="card-title">Списки групп</h5>
+    <div class="row mb-3">
+      <div class="col-sm-12">
+
+        <div class="d-flex align-items-start">
+          <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            {% for group in groups %}
+              <button class="nav-link{% if forloop.first %} active{% endif %}" id="v-pills-{{ group.id }}-tab" data-bs-toggle="pill" data-bs-target="#v-pills-{{ group.id }}" type="button" role="tab" aria-controls="v-pills-{{ group.id }}" aria-selected="true">{{ group }}</button>
+            {% endfor %}
+          </div>
+          <div class="tab-content" id="v-pills-tabContent">
+            {% for group in groups %}
+              <div class="tab-pane fade{% if forloop.first %} show active{% endif %}" id="v-pills-{{ group.id }}" role="tabpanel" aria-labelledby="v-pills-{{ group.id }}-tab">
+                <input type="checkbox" onClick="toggle(this, 'toggle_check-{{ group.id }}')" /> Выбрать всю группу<br/>
+                <ul class="list-group">
+                  {% for user in group.users.all %}
+                    <li class="list-group-item">
+                      <input class="form-check-input me-1" id="toggle_check-{{ group.id }}" type="checkbox" name="chat" value="{{ user.chat }}">
+                      {{ user }}
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  {% endblock  %}
+
+  {% block content_2 %}
+    <h5 class="card-title">Сообщение</h5>
+
+    <div class="row mb-3">
+      <div class="col-sm-12">
+        <textarea class="form-control" style="height: 200px" name="text" required></textarea>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <label for="id_img">Изображение:</label><br>
+        <input type="file" name="img" class="form-control" accept="image/*" id="id_img">
+        
+        <p class="help">Загрузите изображение .jpg, .png</p>
+        
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-sm-12" style="text-align: center;">
+        <input type='submit' value='О Т П Р А В И Т Ь' class="btn btn-primary">
+      </div>
+    </div>
+  </form>
+{% endblock  %}

@@ -1,0 +1,37 @@
+{% extends 'base-1c.html' %}
+{% load static %}
+
+{% block pagehead %}Тематические планирования бота{% endblock  %}
+
+{% block content %}
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Тематические планирования</th>
+        <th scope="col">Группы</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for plan in plans %}
+        <tr>
+          <td width="50%">
+            <a href="{% url 'plans:plan_items' botid plan.id %}">{{ plan.name }}</a>
+          </td>
+          <td>
+            <ul class="list-group list-group-flush">
+                {% for key, value in plans_groups.items %}
+                  {% if key == plan.id %}
+                    {% for group in value %}
+                      <li class="list-group-item">
+                        <a href="{% url 'groups:group' botid group.id %}">{{ group.name }}</a>
+                      </li>
+                    {% endfor %} 
+                  {% endif %}
+                {% endfor %}
+            </ul>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock  %}

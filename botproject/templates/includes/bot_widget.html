@@ -1,0 +1,22 @@
+<div class="card">
+  <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+    {% if botid %}
+      <h2>Бот "{{ bot_name }}"</h2>
+      <a href="javascript:showhide('showhidepas')">
+        пароль...
+      </a>
+      <p id="showhidepas" style="display:none;">пароль: {{ bot_password }}</p>
+      <div class="social-links mt-2">
+        <a href="https://t.me/{{ bot_login }}" class="telegram" target="_blank"><i class="ri-telegram-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Открыть бота в Telegram"></i></a>
+        <a href="{% url 'bots:bot_pass' botid %}" class="password"><i class="ri-lock-password-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Установить/Изменить пароль на бота"></i></a>
+        <a href="{% url 'bots:bot_edit' botid %}" class="edit"><i class="ri-edit-2-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Изменить бота"></i></a>
+        <a href="{% url 'bots:bot_addadmin' botid %}" class="admin"><i class="ri-admin-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Добавить админа бота"></i></a>
+        <a href="#" class="delete"><i class="ri-delete-bin-2-fill del_bot ri-xl" style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top" title="Удалить бота"></i></a>
+    {% else %}
+      <h3>Добавьте бота</h3>
+      <div class="social-links mt-2">
+        <a href="{% url 'bots:bot_add' %}" class="add"><i class="ri-add-box-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Добавить бота"></i></a>
+    {% endif %}
+      </div>
+  </div>
+</div>

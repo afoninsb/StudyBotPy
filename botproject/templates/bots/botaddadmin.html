@@ -1,0 +1,44 @@
+{% extends 'base-1c.html' %}
+{% load static %}
+
+{% block pagehead %}Добавляем админа бота{% endblock  %}
+
+{% block doptext %}
+  <p><strong>Учтите, у нового администратора будет полный доступ
+      к управлению данным ботом!</strong>
+  </p>
+  <p>Назначаемый человек должен зарегистрироваться на платформе
+    как администратор учебного бота с помощью административного бота.
+  </p>
+  <p>Далее ему необходимо написать Telegram-боту
+    <a href='https://t.me/getmyid_bot' target='_blank'>@getmyid_bot</a> любое
+    сообщение; в ответ он получит сообщение с указанием своего Telegram ID.
+    Это число - Telegram ID - ввам нужно указать в форме ниже
+  </p>
+{% endblock  %}
+
+{% block content %}
+  <form action='' method='post'>{% csrf_token %}
+    {% for hidden in form.hidden_fields %}
+      {{ hidden }}
+    {% endfor %}
+    <div style='text-align: center; margin-left: 100px;'>
+      {% for field in form.visible_fields %}
+        <div class="row">
+          <div class="col-md-10">
+            {{field.label_tag}}<br>
+            {% if field.help_text %}
+            {{field.help_text}}<br>
+            {% endif %}
+            {{field}}<br>
+          </div>
+        </div>
+      {% endfor %}
+      <div class="row">
+        <div class="col-md-10">
+          <input type='submit' value='Д О Б А В И Т Ь' class='btn btn-primary'>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock  %}

@@ -1,0 +1,56 @@
+{% extends 'base-1c.html' %}
+{% load static %}
+
+{% block pagehead %}
+{% if is_new %}
+  Добавляем тему в план
+{% else %}
+  Редактируем тему в плане
+{% endif %}
+  <a href="{% url 'plans:plan_items' botid plan_id %}">{{plan_name}}</a>
+{% endblock  %}
+
+{% block doptext %}
+  <details>
+    <summary><label for="fn">Типы материалов (показать/скрыть):</label></summary>
+    <ul>
+      <li>Теоретический материал -
+        ученики изучают теорию, не выполняя никаких оцениваемых работ
+      <li>Контрольная работа -
+        учитель создаёт контрольную работу, раздает ученикам посредством бота,
+        проверяет и оценивает. <b>Ссылку указывать не надо!</b> Привязка контрольной
+        работы к пункту будет осуществлена в разделе "Контрольные работы".
+      <li>Практическая работа -
+        учитель даёт ссылку на задание, ученики выполняют его и сдают на проверку в
+        виде ссылки или в виде файла; учитель проверяет и оценивает.
+        <b>Указать ссылку на текст задания!</b>
+    </ul>
+  </details>
+{% endblock  %}
+
+{% block content %}
+  <form action='' method='post'>{% csrf_token %}
+    <div style='text-align: center; margin-left: 100px;'>
+      {% for field in form %}
+        <div class="row">
+          <div class="col-md-10">
+            {{field.label_tag}}<br>
+            {{field}}
+            {% if field.help_text %}
+              <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
+                {{ field.help_text|safe }}
+              </small>
+            {% endif %}
+          </div>
+        </div><br>
+      {% endfor %}
+      <div class="row">
+        <div class="col-md-10">
+          <input type='submit' 
+            value='{% if is_new %}Д О Б А В И Т Ь{% else %}С О Х Р А Н И Т Ь{% endif %}'
+            class='btn btn-primary'>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock  %}

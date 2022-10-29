@@ -1,0 +1,22 @@
+{% extends 'base-1c.html' %}
+{% load static %}
+
+{% block pagehead %}
+    Администраторы бота
+{% endblock  %}
+
+{% block doptext %}
+  Для удаления администратора бота необходимо, чтобы удаляемый администратор 
+  написал в административном боте заявку в свободном стиле, в которой нужно указать
+  "bot_id = {{ botid }}"
+{% endblock  %}
+
+{% block content %}
+  <ul  class="list-group">
+    {% for admin in admins %}
+      <li class="list-group-item">
+        {{ admin.first_name }} {{ admin.last_name }} | TelegramID: {{ admin.chat }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock  %}

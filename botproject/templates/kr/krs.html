@@ -1,0 +1,36 @@
+{% extends 'base-1c.html' %}
+{% load static %}
+
+{% block pagehead %}Контрольные работы бота{% endblock  %}
+
+{% block content %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Контрольные работы</th>
+        <th scope="col">Темы</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for kr in krs %}
+        <tr>
+          <td width="50%">
+            <a href="{% url 'kr:kr' botid kr.id %}">{{ kr.name }}</a>
+          </td>
+          {% for key, value in kr_plan.items %}
+          {% if key == kr.id %}
+          <td>
+                <a href="{% url 'plans:plan_items' botid value.id %}">{{ value.name }}</a>
+          </td>
+          <td width="10%">
+            <a href="{% url 'kr:kr_out' botid kr.id %}" class="send"><i class="ri-send-plane-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Сгенерировать и раздать контрольную работу"></i></a>
+            <a href="{% url 'works:panel_stat' botid 'k' 'plan' value.id kr.item_id 'all' 0 %}" class="works"><i class="ri-contacts-book-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Варианты и работы учащихся"></i></a>
+          </td>
+          {% endif %}
+          {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock  %}

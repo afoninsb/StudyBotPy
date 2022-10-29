@@ -1,0 +1,71 @@
+{% if botid %}
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'bots:index' %}">
+          <i class="ri-robot-fill ri-1x"></i>
+          <span>Боты</span>
+        </a>
+        <ul id="components-nav" class="nav-content">
+          <li>
+            <a href="{% url 'bots:bot_admins' botid %}">
+              <i class="bi bi-circle"></i><span>Администраторы</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'plans:index' botid %}">
+          <i class="ri-file-text-fill ri-1x"></i>
+          <span>Тематические планирования</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'groups:index' botid %}">
+          <i class="ri-team-fill ri-1x"></i>
+          <span>Группы учащихся</span>
+        </a>
+        <ul id="components-nav" class="nav-content">
+          <li>
+            <a href="{% url 'groups:spisok' botid %}">
+              <i class="bi bi-circle"></i><span>Общий список</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'works:panel' botid %}">
+          <i class="ri-folder-5-fill ri-1x"></i>
+          <span>Работы учащихся</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'kr:index' botid %}">
+          <i class="ri-book-2-fill ri-1x"></i>
+          <span>Контрольные работы</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'message:send_message_group' botid %}">
+          <i class="ri-message-2-fill ri-1x"></i>
+          <span>Сообщения</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#">
+          <i class="ri-question-fill ri-1x"></i>
+          <span>Вопросы</span>
+        </a>
+      </li>
+
+    </ul>
+
+{% else %}
+    выберите бота<br />или<br />создайте нового
+{% endif %}

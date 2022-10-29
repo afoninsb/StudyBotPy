@@ -1,0 +1,52 @@
+{% extends 'base-1c.html' %}
+{% load static %}
+
+
+{% block pagehead %}
+  Редактируем задачу
+{% endblock  %}
+
+{% block content %}
+  <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <div style='text-align: center; margin-left: 100px;'>
+      <div class="row">
+        <div class="col-md-10">
+          <label for="id_number">Номер задания:</label><br>
+          <select name="number" class="form-control" id="id_number">
+            <option disabled>Выберите номер задания</option>
+            {% for number in numbers %}
+              <option value="{{ number }}"{% if number == cur_task.number %} selected{% endif %}>{{ number }}</option>
+            {% endfor %}
+          </select>
+          <p class="help">Выберите номер задания, к которому принадлежит задача</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-10">
+          <label for="id_text">Текст задачи:</label><br>
+          <textarea name="text" cols="40" rows="10" class="form-control" maxlength="100" required id="id_text">{{ cur_task.text }}</textarea>
+          <p class="help">Введите текст задачи</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-10">
+          <label for="id_img">Изображение:</label><br>
+          {% if cur_task.img %}
+            На данный момент:<br>
+            <img src="{{ MEDIA_URL }}{{ cur_task.img }}" class="img-fluid rounded-start">
+            <p><input type="checkbox" name="img-clear" id="img-clear_id">
+            <label for="img-clear_id">Очистить</label></p>
+            <p>Изменить:</p>
+          {% endif %}
+          <input type="file" name="img" accept="image/*" id="id_img">
+          <p class="help">Загрузите изображение .jpg, .png</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-10">
+          <br><input type='submit' value='С О Х Р А Н И Т Ь' class='btn btn-primary'>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock  %}

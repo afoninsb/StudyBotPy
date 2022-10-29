@@ -1,0 +1,65 @@
+{% extends 'base-1c.html' %}
+{% load static %}
+
+{% block pagehead %}Тематическое планирование "{{ plan_name }}"{% endblock  %}
+
+{% block content %}
+  <h4>Темы тематического планирования</h4>
+  <ol class="list-group list-group-numbered">
+    {% for item in items %}
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          {{ item }}
+          {% if item.type == 'k' %}
+            (КР)
+          {% elif item.type == 'p' %}
+            (ПР)
+          {% endif %}
+        </div>
+        {% if item.id in kr_item  %} 
+          <span class="badge">
+            <a href="{% url 'kr:kr' botid kr_item|get_item:item.id %}" target="_blank">
+              <i class="ri-arrow-right-up-fill ri-lg" data-bs-toggle="tooltip" data-bs-placement="top" title="Перейти к работе"></i>
+            </a>
+          </span>
+          <span class="badge">&nbsp;</span>
+        {% endif %}
+        {% if item.link  %} 
+          <span class="badge">
+            <a href="{{ item.link }}" target="_blank">
+              <i class="ri-arrow-right-up-fill ri-lg" data-bs-toggle="tooltip" data-bs-placement="top" title="Перейти к работе"></i>
+            </a>
+          </span>
+          <span class="badge">&nbsp;</span>
+        {% endif %}
+        <span class="badge">
+          <a href="{% url 'plans:item_edit' botid plan_id item.id %}" title="Редактировать название темы">
+            <i class="ri-edit-line ri-lg" data-bs-toggle="tooltip" data-bs-placement="top" title="Редактировать название темы '{{ item }}'"></i>
+          </a>
+        </span>
+        <span class="badge">&nbsp;</span>
+        <span class="badge">
+          <a href='#' title='Удалить пункт' onclick="
+            Swal.fire({
+                icon: 'warning',
+                title: 'Вы точно хотите удалить тему из плана?',
+                {% if item.id in kr_item  %}text: 'К этой теме прикреплена контрольная работа, она также будет удалена!!! Поэтому, если эта контрольная работа вам еще нужна, сначала отредактируйте её, прикрепив к другой теме.',{% endif %}
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Да! Удаляем!',
+                cancelButtonText: 'Нет! Я передумал...'
+            }).then(function(inputvalue){
+                if(inputvalue.isConfirmed){
+                    window.location.href = '{% url 'plans:item_del' botid plan_id item.id %}';
+                } else {
+                    Swal.fire('Хорошо. Оставляем.', '', 'success')
+                }
+            });">
+            <i class="ri-close-circle-fill ri-lg" data-bs-toggle="tooltip" data-bs-placement="top" title="Удалить тему '{{ item }}' из тематического планирования" style="cursor: pointer;"></i>
+          </a>
+        </span>
+     </li>
+    {% endfor %}
+  </ol>
+{% endblock  %}

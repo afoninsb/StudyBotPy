@@ -1,0 +1,47 @@
+{% extends 'base-1c.html' %}
+{% load static %}
+
+{% block pagehead %}
+  Сортируем темы тематического планирования 
+  <a href="{% url 'plans:plan_items' botid plan_id %}">{{plan_name}}</a>
+{% endblock  %}
+
+{% block doptext %}
+  <a href="javascript:showhide('showhidediv')">
+    Показать/скрыть пояснение.
+  </a>
+  <div id="showhidediv" style="display:none;">
+    Вес пункта определяет положение пункта в теме. Чем вес меньше, тем 'легче' пункт и тем выше он будет располагаться.
+    Чем вес больше, тем 'тяжелее' пункт и тем ниже он будет располагаться. Рекомендую распределять веса через 2-3 единцы,
+    чтобы при необходимости можно было размещать пункты между текущими.
+  </div>
+{% endblock  %}
+
+{% block content %}
+  <ol class="list-group list-group-numbered">
+    <form action='' method='post'>
+      <table class="table table-borderless">{% csrf_token %}
+        {% for item in items  %}
+          <tr>
+            <td width="90%">
+              <li class="list-group-item">
+                {% if item.link %}<a href='{{item.link}}' target='_blank'>{% endif %}
+                {{item.name}}
+                {% if item.link %}</a>{% endif %}
+                {% if item.type == 'p' %} (ПР){% endif %}
+              </li>
+            </td>
+            <td valign=top>
+              <input type='hidden' name='ids' value='{{item.id}}'><input type='number' name='weights'
+                value='{{item.weight}}' min='0' max='999' size='3' class="form-control" style="text-align:center;">
+            </td>
+          </tr>
+        {% endfor %}
+        <tr>
+          <td></td>
+          <td><br><input type='submit' value='О Т П Р А В И Т Ь' class="btn btn-primary"></td>
+        </tr>
+      </table>
+    </form>
+  </ol>
+{% endblock  %}

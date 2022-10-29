@@ -1,0 +1,116 @@
+{% extends 'base-1c.html' %}
+{% load static %}
+
+{% block pagehead %}Контрольная работа "{{ kr_name }}"{% endblock  %}
+
+{% block content %}
+  <h5 class="card-title">Задания и выдачи</h5>
+  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    {% for key in tasks %}
+      <li class="nav-item" role="presentation">
+        <button class="nav-link {% if forloop.first %}active{% endif %}" id="pills-{{ key }}-tab" data-bs-toggle="pill" 
+          data-bs-target="#pills-{{ key }}" type="button" role="tab" aria-controls="pills-{{ key }}" 
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">{{ key }}</button>
+      </li>
+    {% endfor %}
+    {% if pulls %}
+      <li class="nav-item" role="presentation">
+        <button class="nav-link id="pills-pulls-tab" data-bs-toggle="pill" 
+        data-bs-target="#pills-pulls" type="button" role="tab" aria-controls="pills-pulls" 
+        aria-selected="false">Выдачи</button>
+      </li>
+    {% endif %}
+  </ul>
+  <div class="tab-content pt-2" id="myTabContent">
+    {% for key, value in tasks.items %}
+      <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="pills-{{ key }}" role="tabpanel" aria-labelledby="{{ key }}-tab">
+        {% autoescape off %}
+          {% for task in value %}
+            {% if key == task.number %}
+              <div class="card mb-3">
+                <div class="row g-0">
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">Задача {{ task.id }}</h5>
+                      {{ task.text|linebreaks }}
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    {% if task.img %}<img src="{{ MEDIA_URL }}{{ task.img }}" class="img-fluid rounded-start">{% endif %}
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <span class="badge">
+                    <a href="{% url 'kr:task_edit' botid kr_id task.id %}" title="Редактировать задачу {{ task.id }}">
+                      <i class="ri-edit-line ri-lg" data-bs-toggle="tooltip" data-bs-placement="top" title="Редактировать задачу {{ task.id }}"></i></a>
+                  </span>
+                  <span class="badge">&nbsp;</span>
+                  <span class="badge">
+                    <a href="#" title='Удалить задачу {{ task.id }}' onclick="
+                      Swal.fire({
+                          icon: 'warning',
+                          title: 'Вы точно хотите удалить задачу?',
+                          showCancelButton: true,
+                          confirmButtonColor: '#d33',
+                          cancelButtonColor: '#3085d6',
+                          confirmButtonText: 'Да! Удаляем!',
+                          cancelButtonText: 'Нет! Я передумал...'
+                      }).then(function(inputvalue){
+                          if(inputvalue.isConfirmed){
+                              window.location.href = '{% url 'kr:task_del' botid kr_id task.id %}';
+                          } else {
+                              Swal.fire('Хорошо. Оставляем.', '', 'success')
+                          }
+                      });">
+                      <i class="ri-close-circle-fill ri-lg" data-bs-toggle="tooltip" data-bs-placement="top" title="Удалить задачу {{ task.id }}" style="cursor: pointer;"></i>
+                    </a>
+                  </span>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endautoescape %}
+      </div>
+    {% endfor %}
+    {% if pulls %}
+      <div class="tab-pane fade" id="pills-pulls" role="tabpanel" aria-labelledby="pulls-tab">
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-md-12">
+              <div class="card-body">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">Дата выдачи</th>
+                      <th scope="col">Группа</th>
+                      <th scope="col">Дедлайн</th>
+                      <th scope="col">Работы</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for pull in pulls %}
+                      <tr>
+                        <td>{{ pull.time }}</td>
+                        <td><a href="{% url 'groups:group' botid pull.group.id %}">{{ pull.group }}</a></td>
+                        <td>
+                          {% if pull.deadline %}
+                            <span style="color: {% if now > pull.deadline %}red{% else %}green{% endif %}">
+                              {{ pull.deadline }}
+                            </span>
+                          {% else %}-{% endif %}
+                        </td>
+                        <td>
+                          <a href="{% url 'works:panel_stat' botid 'k' 'group' pull.group.id itemid 'all' 0 %}" class="works"><i class="ri-contacts-book-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Варианты и работы учащихся"></i></a>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock  %}

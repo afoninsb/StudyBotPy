@@ -1,0 +1,56 @@
+{% if widget or plan_id  or kr_id or group_id%}
+  <div class="card">
+    <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+      {% if widget == 'plan' %}
+        <h3>Добавить план</h3>
+        <div class="social-links mt-2">
+          <a href="{% url 'plans:plan_add' botid %}" class="add"><i class="ri-add-box-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Добавить тематическое планирование"></i></a>
+      
+      {% elif widget == 'group' %}
+      <h3>Добавить группу</h3>
+      <div class="social-links mt-2">
+        <a href="{% url 'groups:group_add' botid %}" class="add"><i class="ri-add-box-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Добавить группу"></i></a>
+
+      {% elif widget == 'kr' %}
+        <h3>Добавить контрольную работу</h3>
+        <div class="social-links mt-2">
+          <a href="{% url 'kr:kr_add' botid %}" class="add"><i class="ri-add-box-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Добавить контрольную работу"></i></a>
+
+      {% elif plan_id %}
+        <h3>План  "{{ plan_name }}"</h3>
+        <div class="social-links mt-2">
+          <a href="{% url 'plans:plan_attach_group' botid plan_id %}" class="link"><i class="ri-links-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Прикрепить тему к группе"></i></a>
+          <a href="{% url 'plans:item_add' botid plan_id %}" class="additem"><i class="ri-menu-add-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Добавить тему в тематическое планирование"></i></a>
+          <a href="{% url 'plans:plan_order' botid plan_id %}" class="order"><i class="ri-list-ordered ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Изменить порядок тем в тематическом планировании"></i></a>
+          <a href="{% url 'plans:plan_edit' botid plan_id %}" class="edit"><i class="ri-edit-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Редактировать название тематического планирования"></i></a>
+          <a href="#" class="delete"><i class="ri-delete-bin-2-fill del_plan ri-xl" style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top" title="Удалить тематическое планирование"></i></a>
+        
+      {% elif group_id %}
+        <h3>Группа  "{{ group_name }}"</h3>
+        <a href="javascript:showhide('showhidepin')">
+          пин-код...
+        </a>
+          {% if group_pin %}<p id="showhidepin" style="display:none;">пин-код: {{ group_pin }}</p>{% endif %}
+        <div class="social-links mt-2">
+          <a href="{% url 'groups:group_attach_plan' botid group_id %}" class="link"><i class="ri-links-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Прикрепить тему к группе"></i></a>
+          <a href="{% url 'groups:group_add_student' botid group_id %}" class="additem"><i class="ri-user-add-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Добавить учащихся в группу"></i></a>
+          <a href="{% url 'groups:group_pin' botid group_id %}" class="order"><i class="ri-lock-password-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Создать новый пин-код группы"></i></a>
+          <a href="{% url 'groups:group_edit' botid group_id %}" class="edit"><i class="ri-edit-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Редактировать название группы"></i></a>
+          <a href="#" class="delete"><i class="ri-delete-bin-2-fill del_group ri-xl" style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top" title="Удалить группу"></i></a>
+          
+      {% elif kr_id %}
+        <h3>Контрольная работа  "{{ kr_name }}"</h3>
+        <div class="social-links mt-2">
+          <a href="{% url 'kr:task_add' botid kr_id %}" class="add"><i class="ri-play-list-add-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Добавить задачу"></i></a>
+          <a href="{% url 'kr:kr_out' botid kr_id %}" class="send"><i class="ri-send-plane-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Сгенерировать и раздать контрольную работу"></i></a>
+          {% comment %} <a href="#" class="works"><i class="ri-contacts-book-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Варианты и работы учащихся"></i></a> {% endcomment %}
+          <a href="{% url 'kr:kr_edit' botid kr_id %}" class="edit"><i class="ri-edit-fill ri-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Редактировать контрольную работу"></i></a>
+          <a href="#" class="delete"><i class="ri-delete-bin-2-fill del_kr ri-xl" style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top" title="Удалить контрольную работу"></i></a>
+      
+      {% endif %}
+    
+        </div>
+    </div>
+  </div>
+{% endif %}

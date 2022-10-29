@@ -1,0 +1,84 @@
+{% extends 'base-2c.html' %}
+{% load static %}
+
+{% block pagehead %}
+  {% for data in datas %}
+    {% if forloop.first %}
+    {% if data.type == 'p' %}Практическая работа {% else %}Контрольная работа {% endif %}
+  {{ data.item.name }}
+  {% endif %}
+  {% endfor %}
+{% endblock  %}
+
+{% block content_1 %}
+  <!-- List group with Links and buttons -->
+  <div class="list-group">
+    {% for data in datas %}
+    {% if idworks != data.id %}<a href="{% url 'works:panel_stat' botid data.type razdel id data.item.id verified data.id %}">{% endif %}
+      <li type="button" class="list-group-item list-group-item-action {% if idworks == data.id %} active{% endif %}" aria-current="true"
+    {% if data.status == 'rejected' and idworks != data.id %} style="background-color: #CC99CC;"{% endif %}
+    {% if data.status == 'done' and idworks != data.id %} style="background-color: #66FF99;"{% endif %}
+    >
+        {{ data.user }}
+    </li>
+    {% if idworks != data.id %}</a>{% endif %}
+    {% endfor %}
+  </div><!-- End List group with Links and buttons -->
+  {% endblock  %}
+
+  
+  {% block content_2 %}
+    {% if idworks == 0 %}
+    <h5 class="card-title">Выберите ученика</h5>
+    {% else %}
+  
+    {% for data in datas %}
+    {% if idworks == data.id %}
+  <h5 class="card-title">{{ data.user }}</h5>
+
+  <div class="row mb-3">
+    <div class="col-sm-12">
+      <ul class="list-group">
+        <a href="{{ data.link }}" target="_blank">
+          <li class="list-group-item d-flex justify-content-between list-group-item-action align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" title="Открыть работу">
+            Смотреть работу <i class="ri-arrow-right-up-fill ri-lg"></i>
+          </li>
+        </a>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Статус:
+             <span class="badge
+             {% if data.status == 'rejected' %}" style="background-color: #CC99CC;"
+             {% elif data.status == 'done' %}" style="background-color: #66FF99;"
+             {% else %} bg-primary"{% endif %}
+             >
+             {{ statutes|get_item:data.status }}</span>
+           </li>
+         </ul><!-- End List With badges -->
+    </div>
+  </div>
+
+  <form action='' method='post'>{% csrf_token %}
+      {% for field in form %}
+      <div class="row mb-3">
+        <div class="col-sm-12">
+                {{field.label_tag}}<br>
+            {{field}}
+            {% if field.help_text %}
+              <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
+                {{ field.help_text|safe }}
+              </small>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+      <div class="row">
+        <div class="col-md-10">
+          <input type='submit' value='С О Х Р А Н И Т Ь' class='btn btn-primary'>
+        </div>
+      </div>
+  </form>
+
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+{% endblock  %}

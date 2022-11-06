@@ -69,3 +69,15 @@ class BotForm(forms.ModelForm):
            or not data.split(':')[0].isnumeric()):
             raise ValidationError('Не верный формат токена')
         return data
+
+
+class BotEditForm(forms.ModelForm):
+    class Meta:
+        model = Bot
+        fields = ('name', )
+        labels = {
+            'name': 'Название (для себя)',
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+        }

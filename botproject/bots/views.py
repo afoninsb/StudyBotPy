@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from groups.models import Spisok
 from edubot.main_classes import BotData
-from .forms import AddAdmin, BotForm, BotPass
+from .forms import AddAdmin, BotForm, BotEditForm, BotPass
 from .models import Bot, BotAdmin
 
 
@@ -65,17 +65,14 @@ def botpass(request, botid):
 
 def botedit(request, botid):
     cur_bot = get_object_or_404(Bot, id=botid)
-    form = BotForm(request.POST or None, instance=cur_bot)
+    form = BotEditForm(request.POST or None, instance=cur_bot)
     if not form.is_valid():
         if request.method == "POST":
             messages.error(request, ' ')
         return render(request, 'bots/botadd.html', {'form': form, })
-    new_bot = form.save(commit=False)
-    new_bot.save()
-    botadmin = BotAdmin.objects.get(chat=request.COOKIES.get('chatid'))
-    botadmin.bot_set.add(new_bot)
+    form.save()
     messages.success(request, 'Бот отредактирован.')
-    return redirect('bots:bot_page', botid=new_bot.id)
+    return redirect('bots:bot_page', botid=botid)
 
 
 def botadd(request):

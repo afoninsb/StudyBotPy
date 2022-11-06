@@ -13,3 +13,10 @@ class RegbotConfig(AppConfig):
             'url': f'{settings.BASE_URL}/webhook/reg/{settings.REGBOT_TOKEN}/'
         }
         bot.set_webhook(data)
+        bot.commands = [
+            {
+                'command': 'cancel',
+                'description': 'Отменить текущую операцию'
+            },
+        ]
+        bot.set_commands()

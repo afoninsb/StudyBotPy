@@ -138,6 +138,18 @@ class LocalData(DataClass):
         Temp.objects.filter(chat=self.chat_id).update(**kwargs)
 
     @property
+    def is_admin(self) -> bool:
+        """Является ли пользователь админом бота в системе?
+        Returns:
+            bool: True - да.
+        """
+        try:
+            get_object_or_404(BotAdmin, chat=self.chat_id)
+        except Exception:
+            return False
+        return True
+
+    @property
     def admins(self) -> dict:
         """Получение словаря админов бота.
         Returns:

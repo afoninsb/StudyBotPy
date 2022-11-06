@@ -1,5 +1,5 @@
 import random
-
+from django.conf import settings
 from bots.models import Bot
 from edubot.main_classes import BotData
 from core.utils import add_dir, del_dir, del_file, replace_from_temp
@@ -75,6 +75,12 @@ def kr_out(request, botid, krid):
                 'parse_mode': 'HTML'
             }
             bot.send_answer(answer)
+            if task.img:
+                answer = {
+                    'chat_id': user.chat,
+                    'photo': f'{settings.BASE_URL}{settings.MEDIA_URL}{task.img}',
+                }
+            bot.send_photo(answer)
             if i + 1 == cur_kr.kolzad:
                 cur_item = cur_kr.item
                 answer = {

@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'core',
     'message',
     'works',
-    'quizzes',
+    # 'quizzes',
     'edubot.apps.EdubotConfig',
     'regbot.apps.RegbotConfig',
 ]

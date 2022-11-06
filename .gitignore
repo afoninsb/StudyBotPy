@@ -2,7 +2,7 @@ TGAPI.txt
 start
 Many_To_Many.txt
 botproject/media/
-
+botproject/quizzes
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

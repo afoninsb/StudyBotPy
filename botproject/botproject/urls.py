@@ -7,7 +7,7 @@ urlpatterns = [
     path('bot/<int:botid>/message/', include('message.urls',
                                              namespace='message')),
     path('bot/<int:botid>/kr/', include('kr.urls', namespace='kr')),
-    path('bot/<int:botid>/quizzes/', include('quizzes.urls', namespace='quizzes')),
+    # path('bot/<int:botid>/quizzes/', include('quizzes.urls', namespace='quizzes')),
     path('bot/<int:botid>/group/', include('groups.urls', namespace='groups')),
     path('bot/<int:botid>/plan/', include('plans.urls', namespace='plans')),
     path('webhook/reg/', include('regbot.urls', namespace='regbot')),

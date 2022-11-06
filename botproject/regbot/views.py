@@ -53,6 +53,11 @@ def main_kbrd(chat_id: int) -> json:
             {'text': 'Администрировать'},
         ]
     ]
+    if int(chat_id) == int(settings.BIG_BOSS_ID):
+        bbbutton = [{'text': 'Сообщение админам'}]
+    else:
+        bbbutton = [{'text': 'Техподдержка'}]
+    keyboard.append(bbbutton)
     mkbrd['keyboard'] = keyboard
     mkbrd['one_time_keyboard'] = False
     mkbrd['resize_keyboard'] = True
@@ -76,6 +81,24 @@ def admin_kbrd(chat_id: int, pin: str) -> json:
     keyboard.append(inline_button)
     akbd['inline_keyboard'] = keyboard
     return json.dumps(akbd)
+
+
+def reply_kbrd(chat_id: int) -> json:
+    """Кнопка Ответить при переписке.
+    Args:
+        chat_id (int): Telegram chat_id юзера.
+    Returns:
+        json: Клавиатура в формате json.
+    """
+    rkbd = {}
+    keyboard = []
+    inline_button = [{
+        'text': 'Ответить',
+        'callback_data': f'reply:{chat_id}'
+    }]
+    keyboard.append(inline_button)
+    rkbd['inline_keyboard'] = keyboard
+    return json.dumps(rkbd)
 
 
 @csrf_exempt
@@ -105,6 +128,8 @@ def reg_webhook(request, bot_tg):
         'chat_id': local.chat_id,
         'reply_markup': hide_kbrd()
     }
+    send_done = False
+    state = local.user_state
 
     # Если нажата кнопка "Администрировать"
     if (bot.get_data_type(from_tg) == 'text' and
@@ -115,10 +140,25 @@ def reg_webhook(request, bot_tg):
         text = 'Для входа в админпанель нажмите кнопку:'
         answer['reply_markup'] = admin_kbrd(local.chat_id, pin)
 
+    # Если нажата кнопка "Техподдержка"
+    elif (bot.get_data_type(from_tg) == 'text' and
+            message.get('text') == 'Техподдержка'
+            and not local.temp_admin_new):
+        local.user_edit(state='support')
+        text = '''Сообщите, о каком боте идет речь и суть проблемы.
+        Пишите сообщение в техподдержку (только текст):'''
+
+    # Если нажата кнопка "Сообщение админам"
+    elif (bot.get_data_type(from_tg) == 'text' and
+            message.get('text') == 'Сообщение админам'
+            and not local.temp_admin_new):
+        local.user_edit(state='message_to_admins')
+        text = 'Пишите (только текст):'
+
     # Принимаем от пользователя регистрационную информацию
     elif (bot.get_data_type(from_tg) == 'text'
-            and local.user_state == ''
-            or local.user_state == 'start'):
+            and state == ''
+            or state == 'start'):
         if local.temp_admin_new:
             local.user_edit(state='get_admin_first_name')
             text = '''Приветствую вас!
@@ -131,7 +171,7 @@ def reg_webhook(request, bot_tg):
             answer['reply_markup'] = main_kbrd(local.chat_id)
             local.user_edit(state='')
 
-    elif local.user_state == 'get_admin_first_name':
+    elif state == 'get_admin_first_name':
         if message.get('text'):
             text = '''Хорошо!
 
@@ -143,7 +183,7 @@ def reg_webhook(request, bot_tg):
         else:
             text = 'Шаг 1. Введите Ваше имя (только Имя):'
 
-    elif local.user_state == 'get_admin_last_name':
+    elif state == 'get_admin_last_name':
         if message.get('text'):
             text = '''Отлично!
 
@@ -155,7 +195,7 @@ def reg_webhook(request, bot_tg):
         else:
             text = 'Шаг 2. Введите вашу Фамилию (только Фамилию):'
 
-    elif local.user_state == 'get_admin_org':
+    elif state == 'get_admin_org':
         if message.get('text'):
             text = '''Ещё немного :)
 
@@ -165,7 +205,7 @@ def reg_webhook(request, bot_tg):
         else:
             text = 'Шаг 3. Ведите организацию, в которой вы работаете:'
 
-    elif local.user_state == 'get_admin_position':
+    elif state == 'get_admin_position':
         if message.get('text'):
             text = '''И последнее....
 
@@ -177,7 +217,7 @@ def reg_webhook(request, bot_tg):
         else:
             text = 'Шаг 4. Введите вашу должность:'
 
-    elif local.user_state == 'get_admin_why':
+    elif state == 'get_admin_why':
         if message.get('text'):
             text = '''Спасибо за информацию.
             Данные были отправлены супербоссу :)
@@ -201,6 +241,72 @@ def reg_webhook(request, bot_tg):
         else:
             text = '''Объясните в 3-х предложениях, зачем вам этот бот, 
         для чего будете его использовать:'''
+
+    # Статус "Сообщение админам"- принимаем текст для всех админов от Супербосса"
+    elif state == 'message_to_admins':
+        if message.get('text') and message.get('text') != 'Сообщение админам':
+            text = 'Сообщение от СуперБосса:\n'
+            admins = local.all_admins_bots
+            for chat_id in admins:
+                answer = {
+                    'chat_id': chat_id,
+                    'text': f"{text}{message['text']}",
+                    'reply_markup': reply_kbrd(local.chat_id),
+                }
+                bot.send_answer(answer)
+            answer = {
+                'chat_id': local.chat_id,
+                'text': 'Сообщение отправлено',
+            }
+            bot.send_answer(answer)
+            local.user_edit(state='')
+            send_done = True
+        elif message['text'] != 'Сообщение админам':
+            text = 'Сообщение не отправлено. Можно отправлять ТОЛЬКО тексты!',
+
+    # Статус "Техподдержка"- принимаем текст от админа для Супербосса"
+    elif state == 'support':
+        if message.get('text') and message.get('text') != 'Техподдержка':
+            cur_user = Spisok.objects.get(chat=local.chat_id)
+            text = ('Сообщение от админа: '
+                    f'{cur_user.first_name} {cur_user.last_name}\n'
+                    f'id: {cur_user.id}; chat-id: {cur_user.chat}\n\n')
+            answer = {
+                'chat_id': settings.BIG_BOSS_ID,
+                'text': f"{text}{message['text']}",
+                'reply_markup': reply_kbrd(local.chat_id),
+            }
+            bot.send_answer(answer)
+            answer = {
+                'chat_id': local.chat_id,
+                'text': 'Сообщение отправлено',
+            }
+            bot.send_answer(answer)
+            local.user_edit(state='')
+            send_done = True
+        elif message['text'] != 'Техподдержка':
+            text = 'Сообщение не отправлено. Можно отправлять ТОЛЬКО тексты!',
+
+    # Статус "Ответить"- принимаем текст в ответ в переписке"
+    elif 'reply' in state:
+        if message.get('text'):
+            chat_id = state.split(':')[1]
+            text = f'Сообщение от: {local.user_full_name}\n\n'
+            answer = {
+                'chat_id': chat_id,
+                'text': f"{text}{message['text']}",
+                'reply_markup': reply_kbrd(local.chat_id),
+            }
+            bot.send_answer(answer)
+            answer = {
+                'chat_id': local.chat_id,
+                'text': 'Сообщение отправлено',
+            }
+            bot.send_answer(answer)
+            local.user_edit(state='')
+            send_done = True
+        else:
+            text = 'Сообщение не отправлено. Можно отправлять ТОЛЬКО тексты!',
 
     # Если супербосс нажал "Одобрить/Отклонить"
     elif bot.get_data_type(from_tg) == 'callback_query':
@@ -229,10 +335,7 @@ def reg_webhook(request, bot_tg):
             text = '''Ваша заявка одобрена.
 
                 На клавиатуре нажмите кнопу "Администрировать",
-                чтобы пройти в административную панель.
-
-                Когда вы создадите своего бота в админпанели,
-                данного бота можете удалить.'''
+                чтобы пройти в административную панель.'''
             text_to_boss = 'Отправлено одобрение'
 
         # Если нажата кнопка "Отклонить"
@@ -243,13 +346,27 @@ def reg_webhook(request, bot_tg):
             answer['reply_markup'] = hide_kbrd()
             text_to_boss = 'Отправлен отказ'
 
+        # Если нажата кнопка "Ответить"
+        elif callback[0] == 'reply':
+            local.user_edit(state=f'reply:{callback[1]}')
+            send_user = Spisok.objects.get(chat=callback[1])
+            text = (f'Отправьте ваш ответ (только текст). Его получит '
+                    f'{send_user.first_name} {send_user.last_name}'),
+
         answer_to_boss = {
             'chat_id': settings.BIG_BOSS_ID,
             'text': text_to_boss,
         }
         bot.send_answer(answer_to_boss)
 
-    answer['text'] = text
-    bot.send_answer(answer)
+        answer_to_boss = {
+            'chat_id': settings.BIG_BOSS_ID,
+            'text': text_to_boss,
+        }
+        bot.send_answer(answer_to_boss)
+
+    if not send_done:
+        answer['text'] = text
+        bot.send_answer(answer)
 
     return render(request, 'webhook/123.html')

@@ -21,11 +21,6 @@ def main_kbrd(chat_id: int) -> json:
         buttons_admin = [
             {'text': 'Администрировать'},
         ]
-        if int(chat_id) == int(settings.BIG_BOSS_ID):
-            bbbutton = {'text': 'Сообщение админам'}
-        else:
-            bbbutton = {'text': 'Техподдержка'}
-        buttons_admin.append(bbbutton)
         keyboard.append(buttons_admin)
     mkbrd['keyboard'] = keyboard
     mkbrd['one_time_keyboard'] = True

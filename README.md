@@ -27,7 +27,7 @@
 <a name="tech"></a> 
 ## Стек технологий
 
-**Server:** Python 3.10, Django 4.1
+**Server:** Python 3.9, Django 4.1
 
 <a name="install"></a> 
 ## Инсталляция
@@ -36,15 +36,15 @@
 
 По ssh зайти в домашнюю папку вашего сайта. В домашней папке вашего сайта (папка должна быть пуста):
 ```bash
-  git clone git@github.com:afoninsb/tutorbot.git ./
-  python3 -3.10 -m venv venv
+  git clone git@github.com:afoninsb/StudyBotPy.git ./
+  python3 -3.9 -m venv venv
   source venv/bin/activate
   pip install -r requirements.txt
 ```
 ### 2. Настраиваем переменные
-Переименовать файл _tutor_bot/.env.template_ в _tutor_bot/.env_
+Переименовать файл _botproject/.env.template_ в _botproject/.env_
 
-В файле _tutor_bot/.env_:
+В файле _botproject/.env_:
 ```bash
 # Код Django
 SECRET_KEY=django-injrtyuygecure-k%yu756#j@g+t636456454y4yeqfu&yfso4!ci%s_&3mg5p
@@ -60,26 +60,13 @@ BD_PASSWORD=bd_password
 BD_HOST=localhost
 ```
 
-Переименовать файл _tutor_bot/tutor_bot/settings.py.template_ в _tutor_bot/tutor_bot/settings.py_
-
-В файле _tutor_bot/tutor_bot/settings.py_:
-```bash
-# URL вашего сайта
-ALLOWED_HOSTS = ['your_cite.com']
-BASE_URL = 'https://your_cite.com'
-
-# Количество оставшихся задач, меньше которого срабатывает алерт
-ALERT_MIN_TASKS = 10
-```
 ### 3. Выполняем миграции, собираем статику, создаём суперпользователя для доступа в админку Django
 ```bash
-  cd tutor_bot
+  cd botproject
   python3 manage.py migrate
   python3 manage.py collectstatic
   python3 manage.py createsuperuser
 ```
-### 4. Настраиваем задание cron
-Настроить файл  _tutor_bot/cron/cron.py_ на ежечасный запуск.
 
 <a name="use"></a> 
 ## Начало работы

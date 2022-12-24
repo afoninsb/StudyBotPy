@@ -142,17 +142,17 @@ class BotData(DataClass):
                     return 'text'
         return ''
 
-    # def get_file(self, data: dict) -> str:
-    #     """Получение информации о файле, отправленном юзером в бот.
-    #     Args:
-    #         data (dict): данные доступа к файлу.
-    #     Returns:
-    #         str: url-адрес файла, готового к скачиванию.
-    #     """
-    #     method = f'{self.url}getFile'
-    #     try:
-    #         file = requests.post(method, data=data)
-    #     except Exception:
-    #         return ''
-    #     file_path = json.loads(file._content)['result']['file_path']
-    #     return f'https://api.telegram.org/file/bot{self.token}/{file_path}'
+    def get_file(self, data: dict) -> str:
+        """Получение информации о файле, отправленном юзером в бот.
+        Args:
+            data (dict): данные доступа к файлу.
+        Returns:
+            str: url-адрес файла, готового к скачиванию.
+        """
+        method = f'{self.url}getFile'
+        try:
+            file = requests.post(method, data=data)
+        except Exception:
+            return ''
+        file_path = json.loads(file._content)['result']['file_path']
+        return f'https://api.telegram.org/file/bot{self.token}/{file_path}'

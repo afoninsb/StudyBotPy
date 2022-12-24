@@ -15,7 +15,7 @@ BASE_URL = 'http://127.0.0.1:8443'
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 ALLOWED_HOSTS = [
-    '76d7-95-72-27-229.eu.ngrok.io',
+    '3e68-95-72-155-198.eu.ngrok.io',
     '127.0.0.1',
     '127.0.0.1:8000',
 ]

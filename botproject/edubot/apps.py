@@ -16,7 +16,7 @@ class EdubotConfig(AppConfig):
                 bot = BotData(cur_bot.tg)
                 data = {
                     'url': f'{settings.BASE_URL}/webhook/{cur_bot.tg}/'
-                    # 'url': f'https://76d7-95-72-27-229.eu.ngrok.io/webhook/{cur_bot.tg}/'
+                    # 'url': f'https://3e68-95-72-155-198.eu.ngrok.io/webhook/{cur_bot.tg}/'
                 }
                 bot.set_webhook(data)
                 bot.set_commands()

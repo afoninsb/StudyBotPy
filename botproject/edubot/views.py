@@ -28,7 +28,7 @@ def webhook(request, bot_tg):
         local.user_new
 
     # Если юзер в базе, но не в этом боте, посылаем на пароль
-    elif not local.user_is_in_bot:
+    elif not local.user_is_in_bot and local.user_state == '':
         local.user_edit(state='start')
 
     # Получаем объект message
@@ -39,7 +39,7 @@ def webhook(request, bot_tg):
 
     # Если у юзера есть состояние, в тип обонвления помещаем его,
     # Команды имеют приоритет - рассматриваются первыми
-    if local.user_state and data_type != 'command':
+    if message['text'] == '/start' or local.user_state and data_type != 'command':
         data_type = 'state'
 
     # Создаём объект Road, определяющий направление движения

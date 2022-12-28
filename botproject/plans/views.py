@@ -3,11 +3,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from groups.models import Group
 from kr.models import KR
 
-from .forms import AddItem, AddPlan, EditItem
-from .models import Plan, PlanItem
+from plans.forms import AddItem, AddPlan, EditItem
+from plans.models import Plan, PlanItem
 
 
 def index(request, botid):
+    """Список тематических планов бота."""
     plans = Plan.objects.filter(bot_id=botid).values()
     groups = Group.objects.filter(bot_id=botid).values()
     plans_groups = {}
@@ -28,6 +29,7 @@ def index(request, botid):
 
 
 def plan_items(request, botid, planid):
+    """Список тем в тематическом плане."""
     items = PlanItem.objects.filter(plan=planid).order_by('weight')
     krs = KR.objects.all()
     kr_item = {kr.item.id: kr.id for kr in krs}
@@ -39,12 +41,14 @@ def plan_items(request, botid, planid):
 
 
 def plan_del(request, botid, planid):
+    """Удаление тематического плана."""
     Plan.objects.filter(id=planid).delete()
     messages.success(request, 'Тематический план удалён!')
     return redirect('plans:index', botid=botid)
 
 
 def plan_order(request, botid, planid):
+    """Сортировка тем в тематическом плане."""
     if request.method != 'POST':
         items = PlanItem.objects.filter(plan=planid).order_by('weight')
         return render(request, 'plans/plan_order.html', {'items': items, })
@@ -62,6 +66,7 @@ def plan_order(request, botid, planid):
 
 
 def plan_add(request, botid):
+    """Добавялем тематический план."""
     form = AddPlan(request.POST or None)
     if form.is_valid():
         new_plan = form.save(commit=False)
@@ -80,6 +85,7 @@ def plan_add(request, botid):
 
 
 def plan_edit(request, botid, planid):
+    """Редактируем тематический план."""
     cur_plan = get_object_or_404(Plan, id=planid)
     form = AddPlan(request.POST or None, instance=cur_plan)
     if form.is_valid():
@@ -95,6 +101,7 @@ def plan_edit(request, botid, planid):
 
 
 def item_add(request, botid, planid):
+    """Добавляем тему в тематический план."""
     form = AddItem(request.POST or None)
     if form.is_valid():
         new_item = form.save(commit=False)
@@ -114,6 +121,7 @@ def item_add(request, botid, planid):
 
 
 def item_edit(request, botid, planid, itemid):
+    """Редактируем тему в тематическом плане."""
     cur_plan = get_object_or_404(Plan, id=planid)
     cur_item = get_object_or_404(PlanItem, id=itemid, plan=cur_plan)
     form = EditItem(request.POST or None, instance=cur_item)
@@ -130,12 +138,14 @@ def item_edit(request, botid, planid, itemid):
 
 
 def item_del(request, botid, planid, itemid):
+    """Удаляем тему из тематического плана."""
     PlanItem.objects.filter(id=itemid).delete()
     messages.success(request, 'Тема удалена из плана.')
     return redirect('plans:plan_items', botid=botid, planid=planid)
 
 
 def plan_attach_group(request, botid, planid):
+    """Прикрепляем группу к тематическому плану."""
     cur_plan = get_object_or_404(Plan, id=planid)
     if request.method != 'POST':
         groups = Group.objects.filter(bot=botid).exclude(

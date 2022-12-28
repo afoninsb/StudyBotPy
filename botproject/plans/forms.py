@@ -1,10 +1,11 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import Plan, PlanItem
+from plans.models import Plan, PlanItem
 
 
 class AddPlan(forms.ModelForm):
+    """Добавляем тематический план."""
     class Meta:
         model = Plan
         fields = ('name', )
@@ -15,6 +16,7 @@ class AddPlan(forms.ModelForm):
 
 
 class AddItem(forms.ModelForm):
+    """Добавяляем тему в тематический план."""
     class Meta:
         model = PlanItem
         fields = ('name', 'link', 'type')
@@ -34,15 +36,11 @@ class AddItem(forms.ModelForm):
             data_link = self.cleaned_data['link']
         except KeyError:
             raise ValidationError('')
-        # data_type = self.cleaned_data['type']
-        # if data_type == 'p' and not data_link:
-        #     err_txt = 'Для практической работы обязательно указать ссылку!'
-        #     self.add_error('link', err_txt)
-        #     raise ValidationError('')
         return self.cleaned_data
 
 
 class EditItem(forms.ModelForm):
+    """Редактируем тему в тематическом плане."""
     class Meta:
         model = PlanItem
         fields = ('name', 'link')
@@ -60,9 +58,4 @@ class EditItem(forms.ModelForm):
             data_link = self.cleaned_data['link']
         except KeyError:
             raise ValidationError('')
-        # data_type = self.cleaned_data['type']
-        # if data_type == 'p' and not data_link:
-        #     err_txt = 'Для практической работы обязательно указать ссылку!'
-        #     self.add_error('link', err_txt)
-        #     raise ValidationError('')
         return self.cleaned_data

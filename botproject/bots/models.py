@@ -2,6 +2,7 @@ from django.db import models
 
 
 class BotAdmin(models.Model):
+    """Модель администратора бота."""
     chat = models.BigIntegerField('Telegram ID', unique=True)
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
@@ -15,6 +16,7 @@ class BotAdmin(models.Model):
 
 
 class Bot(models.Model):
+    """Модель бота."""
     tg = models.CharField(
         'Telegram token',
         max_length=100,

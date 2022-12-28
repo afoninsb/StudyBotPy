@@ -3,29 +3,33 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from groups.models import Spisok
 from edubot.main_classes import BotData
-from .forms import AddAdmin, BotForm, BotEditForm, BotPass
-from .models import Bot, BotAdmin
+from bots.forms import AddAdmin, BotForm, BotEditForm, BotPass
+from bots.models import Bot, BotAdmin
 
 
 def index(request):
+    """Главная страница панели - боты пользователя."""
     cur_admin = get_object_or_404(BotAdmin, chat=request.COOKIES.get('chatid'))
     bots = cur_admin.bot.all()
     return render(request, 'index.html', {'bots': bots, })
 
     
 def bot(request, botid):
+    """Главная страница бота."""
     BotAdmin.objects.filter(
         chat=request.COOKIES.get('chatid')).update(cur_bot=botid)
     return render(request, 'bots/bots.html')
 
 
 def botadmins(request, botid):
+    """Администраторы бота."""
     cur_bot = get_object_or_404(Bot, id=botid)
     admins = cur_bot.admins.all()
     return render(request, 'bots/botadmins.html', {'admins': admins, })
 
 
 def botaddadmin(request, botid):
+    """Добавление администратора бота."""
     if request.method != "POST":
         botadmin = get_object_or_404(
             BotAdmin,
@@ -46,6 +50,7 @@ def botaddadmin(request, botid):
 
 
 def botdel(request, botid):
+    """Удаление бота."""
     cur_bot = get_object_or_404(Bot, id=botid)
     bot = BotData(cur_bot.tg)
     bot.delete_webhook()
@@ -56,6 +61,7 @@ def botdel(request, botid):
 
 
 def botpass(request, botid):
+    """Установка пароля бота."""
     if request.method != "POST":
         return render(request, 'bots/botpass.html', {'form': BotPass, })
     Bot.objects.filter(id=botid).update(password=request.POST['password'])
@@ -64,6 +70,7 @@ def botpass(request, botid):
 
 
 def botedit(request, botid):
+    """Редактирование бота."""
     cur_bot = get_object_or_404(Bot, id=botid)
     form = BotEditForm(request.POST or None, instance=cur_bot)
     if not form.is_valid():
@@ -76,6 +83,7 @@ def botedit(request, botid):
 
 
 def botadd(request):
+    """Добавление бота."""
     form = BotForm(request.POST or None)
     if not form.is_valid():
         context = {

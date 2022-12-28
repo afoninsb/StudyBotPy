@@ -53,6 +53,7 @@ def send_message_to_group(request, botid):
         return render(request, 'message/send_message_group.html', context)
     chats = request.POST.getlist('chat')
     if request.FILES:
+        print(type(request.FILES['img']))
         img = handle_uploaded_file(request.FILES['img'])
     for chat in chats:
         answer = {

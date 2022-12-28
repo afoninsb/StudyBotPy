@@ -5,6 +5,7 @@ from plans.models import PlanItem
 
 
 class KR(models.Model):
+    """Модель контрольной работы."""
     name = models.CharField('Название КР', max_length=100)
     kolzad = models.PositiveSmallIntegerField(
         'Кол-во заданий', default=1)
@@ -22,6 +23,7 @@ class KR(models.Model):
 
 
 class Task(models.Model):
+    """Модель задания."""
     kr = models.ForeignKey(
         KR, on_delete=models.CASCADE,
         related_name='task')
@@ -34,6 +36,7 @@ class Task(models.Model):
 
 
 class KROut(models.Model):
+    """Лог выдачи контрольной работы."""
     kr = models.ForeignKey(
         KR, on_delete=models.CASCADE,
         related_name='kr_out')
@@ -48,6 +51,7 @@ class KROut(models.Model):
 
 
 class TaskOut(models.Model):
+    """Лог выдачи задания."""
     number = models.PositiveSmallIntegerField('Номер задания')
     task = models.ForeignKey(
         Task, on_delete=models.CASCADE,

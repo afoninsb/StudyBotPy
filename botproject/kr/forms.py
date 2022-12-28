@@ -1,10 +1,11 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import KR, Task, KROut
+from kr.models import KR, Task, KROut
 
 
 class KRAdd(forms.ModelForm):
+    """Добавляем и редактируем контрольную работу."""
     class Meta:
         model = KR
         fields = ('name', 'kolzad', 'item')
@@ -30,7 +31,7 @@ class KRAdd(forms.ModelForm):
 
 
 class TaskAdd(forms.ModelForm):
-
+    """Добавляем и редактируем задание в контрольную работу."""
     def __init__(self, *args, **kwargs):
         kolzad = kwargs.pop('kolzad')
         super(TaskAdd, self).__init__(*args, **kwargs)

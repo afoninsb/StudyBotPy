@@ -82,12 +82,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
-                'context_processors.conproc.get_bot',
-                'context_processors.conproc.get_plan',
-                'context_processors.conproc.get_admin',
-                'context_processors.conproc.get_group',
-                'context_processors.conproc.get_kr',
-                'context_processors.conproc.get_crumbs',
+                'core.conproc.get_context',
             ],
             'libraries': {
                 'custom_tags': 'core.custom_tags'

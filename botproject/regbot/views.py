@@ -3,9 +3,10 @@ import json
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
+from edubot.main_classes import BotData, LocalData
+
 from .datatypes_classes import (HighLevelCallback, HighLevelCommand,
                                 HighLevelState, HighLevelText, Road)
-from edubot.main_classes import BotData, LocalData
 
 
 @csrf_exempt

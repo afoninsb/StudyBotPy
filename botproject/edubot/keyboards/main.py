@@ -1,16 +1,15 @@
 import json
+
 from bots.models import BotAdmin
-from django.conf import settings
 
 
-def main_kbrd(chat_id: int) -> json:
+def main_kbrd(chat_id: int) -> str:
     """Главная клавиатура бота.
     Args:
         chat_id (int): Telegram chat_id юзера.
     Returns:
-        json: Клавиатура в формате json.
+        str: Клавиатура в формате json.
     """
-    mkbrd = {}
     keyboard = [
         [
             {'text': 'План'},
@@ -22,7 +21,9 @@ def main_kbrd(chat_id: int) -> json:
             {'text': 'Администрировать'},
         ]
         keyboard.append(buttons_admin)
-    mkbrd['keyboard'] = keyboard
-    mkbrd['one_time_keyboard'] = True
-    mkbrd['resize_keyboard'] = True
+    mkbrd = {
+        'keyboard': keyboard,
+        'one_time_keyboard': True,
+        'resize_keyboard': True,
+    }
     return json.dumps(mkbrd)

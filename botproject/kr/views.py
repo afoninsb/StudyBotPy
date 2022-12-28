@@ -1,17 +1,18 @@
 import random
+
 from django.conf import settings
-from bots.models import Bot
-from edubot.main_classes import BotData
-from core.utils import add_dir, del_dir, del_file, replace_from_temp
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-from edubot.keyboards import push_kr_kbrd
-from groups.models import Group, Spisok
-from plans.models import Plan, PlanItem
 
+from bots.models import Bot
+from core.utils import add_dir, del_dir, del_file, replace_from_temp
+from edubot.keyboards import push_kr_kbrd
+from edubot.main_classes import BotData
+from groups.models import Group, Spisok
 from kr.forms import KRAdd, TaskAdd
 from kr.models import KR, KROut, Task, TaskOut
+from plans.models import Plan, PlanItem
 
 
 def kr_out(request, botid, krid):

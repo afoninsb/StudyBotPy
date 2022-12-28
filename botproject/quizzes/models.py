@@ -1,6 +1,7 @@
 from django.db import models
-from plans.models import Plan
+
 from bots.models import Bot
+from plans.models import Plan
 
 TYPES = (
     ('1', 'Один правильный'),

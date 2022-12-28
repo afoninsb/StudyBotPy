@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from kr.models import KR, Task, KROut
+from kr.models import KR, Task
 
 
 class KRAdd(forms.ModelForm):

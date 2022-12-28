@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import BotAdmin, Bot
+from bots.models import Bot, BotAdmin
 
 
 class BotOwner(admin.ModelAdmin):

@@ -5,9 +5,9 @@
 
 from uuid import uuid1
 
-from bots.models import Bot, BotAdmin
-from regbot.keyboards import admin_kbrd, main_kbrd, hide_kbrd
+from bots.models import BotAdmin
 from edubot.main_classes import BotData, LocalData
+from regbot.keyboards import admin_kbrd, hide_kbrd, main_kbrd
 
 from .datatypesclass import Observer, Subject
 

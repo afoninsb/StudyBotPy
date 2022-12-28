@@ -1,13 +1,13 @@
-from bots.models import Bot
 from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
+
+from bots.models import Bot
 from edubot.main_classes import BotData
 from groups.models import Group, Spisok
 from plans.models import Plan, PlanItem
-
-from .forms import ReviewWork
-from .models import Work
+from works.forms import ReviewWork
+from works.models import Work
 
 
 def panel_stat(request, botid, **kwargs):
@@ -96,7 +96,7 @@ def panel(request, botid):
                     item_temp['work_passed'] = True
                     p_p_passed = True
                 items_info.append(item_temp)
-        if len(items_info) > 0:
+        if items_info:
             p_plans_info.append(
                 {'id': plan.id, 'name': plan.name, 'items': items_info}
             )
@@ -121,7 +121,7 @@ def panel(request, botid):
                         item_temp['work_passed'] = True
                         p_k_passed = True
                     items_info.append(item_temp)
-        if len(items_info) > 0:
+        if items_info:
             p_groups_info.append(
                 {'id': group.id, 'name': group.name, 'items': items_info}
             )
@@ -146,7 +146,7 @@ def panel(request, botid):
                     item_temp['work_passed'] = True
                     k_p_passed = True
                 items_info.append(item_temp)
-        if len(items_info) > 0:
+        if items_info:
             k_plans_info.append(
                 {'id': plan.id, 'name': plan.name, 'items': items_info}
             )
@@ -173,7 +173,7 @@ def panel(request, botid):
                         item_temp['work_passed'] = True
                         k_k_passed = True
                     items_info.append(item_temp)
-        if len(items_info) > 0:
+        if items_info:
             k_groups_info.append(
                 {'id': group.id, 'name': group.name, 'items': items_info}
             )

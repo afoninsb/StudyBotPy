@@ -1,7 +1,8 @@
-from bots.models import BotAdmin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+
+from bots.models import BotAdmin
 
 
 def enter(request, chatid, pin):

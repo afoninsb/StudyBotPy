@@ -1,9 +1,9 @@
 from django.conf import settings
 
 from edubot.main_classes import BotData, LocalData
+from regbot.keyboards import hide_kbrd
 from regbot.keyboards.inline import approve_admin
 from regbot.models import Temp
-from regbot.keyboards import hide_kbrd
 
 
 def reg_start(message: dict, bot: BotData, local: LocalData) -> None:

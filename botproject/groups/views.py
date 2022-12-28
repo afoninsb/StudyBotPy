@@ -1,11 +1,11 @@
-from bots.models import Bot
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from faker import Faker
-from plans.models import Plan
 
+from bots.models import Bot
 from groups.forms import AddGroup
 from groups.models import Group, Spisok
+from plans.models import Plan
 
 
 def index(request, botid):
@@ -14,12 +14,9 @@ def index(request, botid):
     groups = Group.objects.filter(bot_id=botid).values()
     groups_plans = {}
     for item_group in groups:
-        group_value = []
         cur_group = get_object_or_404(Group, id=item_group['id'])
         plans_group = cur_group.plans.all().values()
-        for item_plan in plans:
-            if item_plan in plans_group:
-                group_value.append(item_plan)
+        group_value = [item_plan for item_plan in plans if item_plan in plans_group]
         groups_plans[item_group['id']] = group_value
     context = {
         'groups_plans': groups_plans,

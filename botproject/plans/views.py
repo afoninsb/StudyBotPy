@@ -1,8 +1,8 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
+
 from groups.models import Group
 from kr.models import KR
-
 from plans.forms import AddItem, AddPlan, EditItem
 from plans.models import Plan, PlanItem
 
@@ -13,12 +13,9 @@ def index(request, botid):
     groups = Group.objects.filter(bot_id=botid).values()
     plans_groups = {}
     for item_plan in plans:
-        plan_value = []
         cur_plan = get_object_or_404(Plan, id=item_plan['id'])
         groups_plan = cur_plan.groupplan.all().values()
-        for item_group in groups:
-            if item_group in groups_plan:
-                plan_value.append(item_group)
+        plan_value = [item_group for item_group in groups if item_group in groups_plan]
         plans_groups[item_plan['id']] = plan_value
     context = {
         'plans_groups': plans_groups,

@@ -5,10 +5,11 @@
 """
 
 from django.conf import settings
-from regbot.keyboards.main import hide_kbrd, main_kbrd
-from regbot.models import Temp
+
 from bots.models import BotAdmin
 from groups.models import Spisok
+from regbot.keyboards.main import hide_kbrd, main_kbrd
+from regbot.models import Temp
 
 from .datatypesclass import Observer, Subject
 

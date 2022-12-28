@@ -1,8 +1,8 @@
 import os
 import shutil
-import requests
-from faker import Faker
+
 from django.conf import settings
+from faker import Faker
 
 
 def handle_uploaded_file(f):

@@ -1,10 +1,11 @@
-from core.utils import add_dir, del_dir
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
-from groups.models import Spisok
-from edubot.main_classes import BotData
-from bots.forms import AddAdmin, BotForm, BotEditForm, BotPass
+
+from bots.forms import AddAdmin, BotEditForm, BotForm, BotPass
 from bots.models import Bot, BotAdmin
+from core.utils import add_dir, del_dir
+from edubot.main_classes import BotData
+from groups.models import Spisok
 
 
 def index(request):

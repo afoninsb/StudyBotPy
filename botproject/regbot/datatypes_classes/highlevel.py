@@ -17,7 +17,7 @@ class HighLevelCommand(Observer):
         self, subject: Subject, bot: BotData, local: LocalData, **kwargs
     ) -> None:
         """Направления при получении комманды."""
-        from .commandlevel import (CommandCancel, )
+        from .commandlevel import CommandCancel
         if subject._state == 'command':
             command = kwargs['message']['text'][1:]
             road = Road()
@@ -34,7 +34,8 @@ class HighLevelCallback(Observer):
         self, subject: Subject, bot: BotData, local: LocalData, **kwargs
     ) -> None:
         """Направления при получении callback_query."""
-        from .callbacklevel import CallbackApprove, CallbackReject, CallbackReply
+        from .callbacklevel import (CallbackApprove, CallbackReject,
+                                    CallbackReply)
         if subject._state == 'callback_query':
             callback_query = kwargs['from_tg']['callback_query']['data']
             callback = callback_query.split(':')[0]

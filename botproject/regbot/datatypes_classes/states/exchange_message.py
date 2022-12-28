@@ -1,4 +1,5 @@
 from django.conf import settings
+
 from edubot.keyboards.inline import reply_kbrd
 from edubot.main_classes import BotData, LocalData
 from groups.models import Spisok

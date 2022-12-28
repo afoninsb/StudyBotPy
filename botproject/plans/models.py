@@ -1,5 +1,6 @@
-from bots.models import Bot
 from django.db import models
+
+from bots.models import Bot
 
 
 class Plan(models.Model):

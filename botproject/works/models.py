@@ -1,5 +1,6 @@
-from bots.models import Bot
 from django.db import models
+
+from bots.models import Bot
 from groups.models import Group, Spisok
 from kr.models import KROut
 from plans.models import PlanItem

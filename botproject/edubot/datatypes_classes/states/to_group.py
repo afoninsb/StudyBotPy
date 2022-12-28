@@ -1,5 +1,5 @@
-from groups.models import Group, Spisok
 from edubot.main_classes import BotData, LocalData
+from groups.models import Group, Spisok
 
 
 def user_to_group(message: dict, bot: BotData, local: LocalData) -> None:

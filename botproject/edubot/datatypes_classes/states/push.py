@@ -1,7 +1,8 @@
-from bots.models import Bot
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
+
+from bots.models import Bot
 from edubot.main_classes import BotData, LocalData
 from groups.models import Group, Spisok
 from kr.models import KROut

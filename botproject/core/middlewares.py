@@ -1,8 +1,9 @@
 from typing import Callable
 
-from bots.models import Bot, BotAdmin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest, HttpResponse
+
+from bots.models import Bot, BotAdmin
 from groups.models import Group
 from kr.models import KR
 from plans.models import Plan

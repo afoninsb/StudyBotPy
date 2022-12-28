@@ -4,9 +4,10 @@ import os
 from uuid import uuid1
 
 import requests
-from bots.models import Bot, BotAdmin
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+
+from bots.models import Bot, BotAdmin
 from groups.models import Spisok
 from regbot.models import Temp
 from works.models import Work

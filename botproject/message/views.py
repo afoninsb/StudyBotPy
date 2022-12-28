@@ -1,8 +1,9 @@
-from bots.models import Bot
-from core.utils import handle_uploaded_file
 from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
+
+from bots.models import Bot
+from core.utils import handle_uploaded_file
 from edubot.main_classes import BotData
 from groups.models import Group, Spisok
 

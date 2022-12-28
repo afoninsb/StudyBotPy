@@ -3,6 +3,7 @@ from django.db import models
 
 
 class Plan(models.Model):
+    """Модель тематического плана."""
     name = models.CharField(
         'Название плана',
         max_length=33,
@@ -18,6 +19,8 @@ class Plan(models.Model):
 
 
 class PlanItem(models.Model):
+    """Модель темы в тематическом плане."""
+    # Типы тем
     TYPES = (
         ('t', 'Теоретический материал'),
         ('k', 'Контрольная работа'),

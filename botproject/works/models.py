@@ -6,6 +6,8 @@ from plans.models import PlanItem
 
 
 class Work(models.Model):
+    """Модель работы ученика."""
+    # Типы работ ученика
     TYPES = (
         ('k', 'Контрольная работа'),
         ('p', 'Практическая работа'),

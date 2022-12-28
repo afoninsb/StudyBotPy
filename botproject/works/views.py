@@ -11,6 +11,7 @@ from .models import Work
 
 
 def panel_stat(request, botid, **kwargs):
+    """Панель по работе ученика."""
     statutes = {
         'passed': 'Сдано',
         'rejected': 'Отклонено',
@@ -74,7 +75,7 @@ def panel_stat(request, botid, **kwargs):
 
 
 def panel(request, botid):
-
+    """Сводная панель по всем работам."""
     plans = Plan.objects.filter(bot_id=botid)
     groups = Group.objects.filter(bot_id=botid).prefetch_related('plans')
     items = PlanItem.objects.filter(type='p')

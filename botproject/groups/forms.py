@@ -4,6 +4,7 @@ from .models import Group
 
 
 class AddGroup(forms.ModelForm):
+    """Добавляем группу."""
     class Meta:
         model = Group
         fields = ('name', )

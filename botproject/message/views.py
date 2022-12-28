@@ -8,6 +8,7 @@ from groups.models import Group, Spisok
 
 
 def send_message_to_user(request, botid, userid):
+    """Посылаем из панели сообщение ученику."""
     cur_bot = get_object_or_404(Bot, id=botid)
     bot = BotData(cur_bot.tg)
     cur_user = get_object_or_404(Spisok, id=userid)
@@ -40,6 +41,7 @@ def send_message_to_user(request, botid, userid):
 
 
 def send_message_to_group(request, botid):
+    """Посылаем из панели сообщение группе."""
     cur_bot = get_object_or_404(Bot, id=botid)
     bot = BotData(cur_bot.tg)
     if request.method != 'POST':

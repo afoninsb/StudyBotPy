@@ -1,10 +1,11 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import Bot, BotAdmin
+from bots.models import Bot, BotAdmin
 
 
 class AddAdmin(forms.Form):
+    """Добавляем админа бота."""
     tgid = forms.IntegerField(
         label='TelegramID нового админа',
         widget=forms.NumberInput(
@@ -27,6 +28,7 @@ class AddAdmin(forms.Form):
 
 
 class BotPass(forms.ModelForm):
+    """Устанавливаем пароль бота."""
     class Meta:
         model = Bot
         fields = ('password', )
@@ -37,6 +39,7 @@ class BotPass(forms.ModelForm):
 
 
 class BotForm(forms.ModelForm):
+    """Добавляем бота."""
     class Meta:
         model = Bot
         fields = ('tg', 'login', 'name')
@@ -72,6 +75,7 @@ class BotForm(forms.ModelForm):
 
 
 class BotEditForm(forms.ModelForm):
+    """Редактируем бота."""
     class Meta:
         model = Bot
         fields = ('name', )

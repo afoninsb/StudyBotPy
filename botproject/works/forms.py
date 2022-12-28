@@ -1,10 +1,11 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import Work
+from works.models import Work
 
 
 class ReviewWork(forms.ModelForm):
+    """Проверяем работу ученика."""
     class Meta:
         model = Work
         fields = ('status', 'review', 'mark')

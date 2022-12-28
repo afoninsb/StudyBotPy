@@ -10,11 +10,12 @@ from edubot.keyboards import push_kr_kbrd
 from groups.models import Group, Spisok
 from plans.models import Plan, PlanItem
 
-from .forms import KRAdd, TaskAdd
-from .models import KR, KROut, Task, TaskOut
+from kr.forms import KRAdd, TaskAdd
+from kr.models import KR, KROut, Task, TaskOut
 
 
 def kr_out(request, botid, krid):
+    """Генерируем и раздаём контрольную работу."""
     cur_bot = get_object_or_404(Bot, id=botid)
     bot = BotData(cur_bot.tg)
     cur_kr = get_object_or_404(KR, id=krid)
@@ -96,6 +97,7 @@ def kr_out(request, botid, krid):
 
 
 def index(request, botid):
+    """Список контрольных работ бота."""
     krs = KR.objects.filter(bot=botid)
     kr_plan = {}
     for kr in krs:
@@ -111,6 +113,7 @@ def index(request, botid):
 
 
 def kr_add(request, botid):
+    """Добавление контрольной работы."""
     form = KRAdd(request.POST or None)
     form.fields["item"].queryset = PlanItem.objects.filter(
         type='k', plan_id__in=Plan.objects.filter(bot_id=botid).values_list(
@@ -134,6 +137,7 @@ def kr_add(request, botid):
 
 
 def kr_edit(request, botid, krid):
+    """Редактирование контрольной работы."""
     cur_kr = get_object_or_404(KR, id=krid)
     form = KRAdd(request.POST or None, instance=cur_kr)
     form.fields["item"].queryset = PlanItem.objects.filter(
@@ -154,6 +158,7 @@ def kr_edit(request, botid, krid):
 
 
 def kr(request, botid, krid):
+    """Страница контрольной работы."""
     cur_kr = get_object_or_404(KR, id=krid)
     task_list = cur_kr.task.all()
     tasks = {}
@@ -174,6 +179,7 @@ def kr(request, botid, krid):
 
 
 def task_del(request, botid, krid, taskid):
+    """Удаляем задание."""
     cur_task = Task.objects.get(id=taskid)
     if cur_task.img:
         del_file(url=cur_task.img)
@@ -183,6 +189,7 @@ def task_del(request, botid, krid, taskid):
 
 
 def kr_del(request, botid, krid):
+    """Удаляем контрольную работу."""
     KR.objects.filter(id=krid).delete()
     messages.success(request, 'Контрольная работа удалена')
     del_dir(botid=botid, num_dir=krid, type_dir='kr')
@@ -190,6 +197,7 @@ def kr_del(request, botid, krid):
 
 
 def task_add(request, botid, krid):
+    """Добавляем задание."""
     cur_kr = get_object_or_404(KR, id=krid)
     form = TaskAdd(request.POST, request.FILES, kolzad=cur_kr.kolzad or None)
     context = {
@@ -213,6 +221,7 @@ def task_add(request, botid, krid):
 
 
 def task_edit(request, botid, krid, taskid):
+    """Редактируем задание."""
     cur_task = get_object_or_404(Task, id=taskid)
     img_url = cur_task.img
     cur_kr = get_object_or_404(KR, id=krid)

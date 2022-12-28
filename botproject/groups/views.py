@@ -4,11 +4,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from faker import Faker
 from plans.models import Plan
 
-from .forms import AddGroup
-from .models import Group, Spisok
+from groups.forms import AddGroup
+from groups.models import Group, Spisok
 
 
 def index(request, botid):
+    """Группы бота."""
     plans = Plan.objects.filter(bot_id=botid).values()
     groups = Group.objects.filter(bot_id=botid).values()
     groups_plans = {}
@@ -29,6 +30,7 @@ def index(request, botid):
 
 
 def spisok(request, botid):
+    """Список группы."""
     cur_bot = get_object_or_404(Bot, id=botid)
     users = cur_bot.spisok.all()
     context = {
@@ -38,6 +40,7 @@ def spisok(request, botid):
 
 
 def group(request, botid, groupid):
+    """Страница группы."""
     cur_group = get_object_or_404(Group, id=groupid)
     users = cur_group.users.all()
     plans = cur_group.plans.all()
@@ -49,20 +52,14 @@ def group(request, botid, groupid):
 
 
 def group_del(request, botid, groupid):
+    """Удаляем группу."""
     Group.objects.filter(id=groupid).delete()
     messages.success(request, 'Группа удалена')
     return redirect('groups:index', botid=botid)
 
 
-def generate_pin():
-    fake = Faker()
-    pin = str(fake.ean(length=8))
-    if Group.objects.filter(pin=pin):
-        generate_pin()
-    return pin
-
-
 def group_add(request, botid):
+    """Добавляем группу."""
     form = AddGroup(request.POST or None)
     if form.is_valid():
         new_group = form.save(commit=False)
@@ -82,6 +79,7 @@ def group_add(request, botid):
 
 
 def group_edit(request, botid, groupid):
+    """Редактируем группу."""
     cur_group = get_object_or_404(Group, id=groupid)
     form = AddGroup(request.POST or None, instance=cur_group)
     if form.is_valid():
@@ -97,13 +95,24 @@ def group_edit(request, botid, groupid):
 
 
 def group_pin(request, botid, groupid):
+    """Устанавливаем пин-код группе."""
     pin = generate_pin()
     Group.objects.filter(id=groupid).update(pin=pin)
     messages.success(request, 'Группе установлен пин-код '+pin)
     return redirect('groups:group', botid=botid, groupid=groupid)
 
 
+def generate_pin():
+    """Генерируем пин-код группы."""
+    fake = Faker()
+    pin = str(fake.ean(length=8))
+    if Group.objects.filter(pin=pin):
+        generate_pin()
+    return pin
+
+
 def del_student_from_bot(request, botid, userid):
+    """Удаляем ученика из бота."""
     cur_bot = get_object_or_404(Bot, id=botid)
     cur_user = get_object_or_404(Spisok, id=userid)
     if cur_user.bots.count() > 1:
@@ -115,6 +124,7 @@ def del_student_from_bot(request, botid, userid):
 
 
 def group_del_attach_plan(request, botid, groupid, planid):
+    """Открепляем план от группы."""
     cur_plan = get_object_or_404(Plan, id=planid)
     cur_group = get_object_or_404(Group, id=groupid)
     cur_group.plans.remove(cur_plan)
@@ -123,6 +133,7 @@ def group_del_attach_plan(request, botid, groupid, planid):
 
 
 def group_del_attach_user(request, botid, groupid, userid):
+    """Удаляем ученика из группы."""
     cur_user = get_object_or_404(Spisok, id=userid)
     cur_group = get_object_or_404(Group, id=groupid)
     cur_group.users.remove(cur_user)
@@ -131,6 +142,7 @@ def group_del_attach_user(request, botid, groupid, userid):
 
 
 def group_add_user(request, botid, groupid):
+    """Добавляем ученика в группу."""
     cur_group = get_object_or_404(Group, id=groupid)
     if request.method != 'POST':
         cur_bot = get_object_or_404(Bot, id=botid)
@@ -148,6 +160,7 @@ def group_add_user(request, botid, groupid):
 
 
 def group_attach_plan(request, botid, groupid):
+    """Прикрепляем план к группе."""
     cur_group = get_object_or_404(Group, id=groupid)
     if request.method != 'POST':
         plans = Plan.objects.filter(bot=botid).exclude(

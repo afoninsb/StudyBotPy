@@ -14,9 +14,14 @@ class EdubotConfig(AppConfig):
         if bots := Bot.objects.all():
             for cur_bot in bots:
                 bot = BotData(cur_bot.tg)
-                data = {
-                    'url': f'{settings.BASE_URL}/webhook/{cur_bot.tg}/'
-                    # 'url': f'https://3e68-95-72-155-198.eu.ngrok.io/webhook/{cur_bot.tg}/'
-                }
+                url = f'/webhook/{cur_bot.tg}/'
+                if settings.DEBUG:
+                    data = {
+                        'url': f'https://{settings.NGROK}{url}'
+                    }
+                else:
+                    data = {
+                        'url': f'{settings.BASE_URL}{url}'
+                    }
                 bot.set_webhook(data)
                 bot.set_commands()

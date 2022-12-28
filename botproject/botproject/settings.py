@@ -1,24 +1,32 @@
 import os
-from pathlib import Path
-
 from dotenv import load_dotenv
-
-DEBUG = True
+from pathlib import Path
 
 load_dotenv()
 
-SECRET_KEY = str(os.getenv('SECRET_KEY'))
-BIG_BOSS_ID = os.getenv('BIG_BOSS_ID')
-REGBOT_TOKEN = str(os.getenv('REGBOT_TOKEN'))
+DEBUG = os.getenv("DEBUG", 'False').lower() in ('true', '1', 't')
 
-BASE_URL = 'http://127.0.0.1:8443'
+SECRET_KEY = str(os.getenv('SECRET_KEY'))
+
+BIG_BOSS_ID = os.getenv('BIG_BOSS_ID')
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-ALLOWED_HOSTS = [
-    '3e68-95-72-155-198.eu.ngrok.io',
-    '127.0.0.1',
-    '127.0.0.1:8000',
-]
+if DEBUG:
+    REGBOT_TOKEN = str(os.getenv('TEMP_REGBOT_TOKEN'))
+
+    NGROK = str(os.getenv('NGROK'))
+
+    ALLOWED_HOSTS = ['127.0.0.1', NGROK]
+
+    BASE_URL = 'http://127.0.0.1:8000'
+
+else:
+    REGBOT_TOKEN = str(os.getenv('REGBOT_TOKEN'))
+
+    ALLOWED_HOSTS = ['edu.studybot.fun']
+
+    BASE_URL = 'https://edu.studybot.fun'
 
 DATABASES = {
     'default': {
@@ -117,9 +125,17 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+
+if DEBUG:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static'),
+    ]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "static_dev"),
+    ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

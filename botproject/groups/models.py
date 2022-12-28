@@ -4,6 +4,7 @@ from plans.models import Plan
 
 
 class Spisok (models.Model):
+    """Модель учащегося."""
     chat = models.BigIntegerField(
         'Telegram ID',
         unique=True)
@@ -28,6 +29,7 @@ class Spisok (models.Model):
 
 
 class Group(models.Model):
+    """Модель группы."""
     name = models.CharField(
         'Название группы',
         max_length=100)

@@ -6,6 +6,7 @@ from django.conf import settings
 
 
 def handle_uploaded_file(f):
+    """Сохраняем загруженный файл во временную папку."""
     if not os.path.exists(settings.TEMP_ROOT):
         os.mkdir(settings.TEMP_ROOT, mode=0o777)
     fake = Faker()
@@ -19,6 +20,7 @@ def handle_uploaded_file(f):
 
 
 def replace_from_temp(**kwargs):
+    """Перемещаем файл из временной папки в нужную."""
     botid = kwargs.get('botid', False)
     img_name = kwargs.get('img_name', False)
     if not img_name:
@@ -37,6 +39,7 @@ def replace_from_temp(**kwargs):
 
 
 def del_file(**kwargs):
+    """Удаляем файл."""
     url = kwargs.get('url', False)
     if url:
         path = str(url).split('/')
@@ -46,6 +49,7 @@ def del_file(**kwargs):
 
 
 def del_dir(**kwargs):
+    """Удаляем каталог."""
     botid = kwargs.get('botid', False)
     path = os.path.join(settings.MEDIA_ROOT, str(botid))
     num_dir = kwargs.get('num_dir', False)
@@ -57,6 +61,7 @@ def del_dir(**kwargs):
 
 
 def add_dir(**kwargs):
+    """Добавляем каталог."""
     botid = kwargs.get('botid', False)
     path = os.path.join(settings.MEDIA_ROOT, str(botid))
     num_dir = kwargs.get('num_dir', False)
